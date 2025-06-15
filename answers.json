@@ -1,0 +1,56 @@
+[
+  {
+    "username": "Ige Peter",
+    "questionId": 1,
+    "answer": "Yes, often",
+    "submittedAt": "2025-06-13T13:12:16.975Z"
+  },
+  {
+    "username": "Ige Peter",
+    "questionId": 2,
+    "answer": "Not well",
+    "submittedAt": "2025-06-13T13:12:16.977Z"
+  },
+  {
+    "username": "Ige Peter",
+    "questionId": 3,
+    "answer": "This is too much, I should just quit",
+    "submittedAt": "2025-06-13T13:12:16.977Z"
+  },
+  {
+    "username": "Oyeyiola Peace Adeoba",
+    "questionId": 1,
+    "answer": "Sometimes",
+    "submittedAt": "2025-06-13T13:12:33.562Z"
+  },
+  {
+    "username": "Oyeyiola Peace Adeoba",
+    "questionId": 2,
+    "answer": "Somewhat well",
+    "submittedAt": "2025-06-13T13:12:33.562Z"
+  },
+  {
+    "username": "Oyeyiola Peace Adeoba",
+    "questionId": 3,
+    "answer": "I can handle this if I break it down into smaller tasks",
+    "submittedAt": "2025-06-13T13:12:33.562Z"
+  },
+  {
+    "username": "Ige Paul",
+    "questionId": 1,
+    "answer": "I'm not sure",
+    "submittedAt": "2025-06-13T13:14:40.657Z"
+  },
+  {
+    "username": "Ige Paul",
+    "questionId": 2,
+    "answer": "I haven't thought about it",
+    "submittedAt": "2025-06-13T13:14:40.657Z"
+  },
+  {
+    "username": "Ige Paul",
+    "questionId": 3,
+    "answer": "There is no way out of this",
+    "submittedAt": "2025-06-13T13:14:40.657Z"
+  }
+]

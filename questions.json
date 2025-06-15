@@ -1,0 +1,40 @@
+[
+  {
+    "id": 1,
+    "question": "Do you tend to overgeneralize situations?",
+    "choices": [
+      "Yes, often",
+      "Sometimes",
+      "No, never",
+      "I'm not sure"
+    ],
+    "answer": "Yes, often",
+    "createdBy": "admin"
+  },
+  {
+    "id": 2,
+    "question": "How well do you feel you are managing work-life balance?",
+    "choices": [
+      "Very well",
+      "Somewhat well",
+      "Not well",
+      "I haven't thought about it"
+    ],
+    "answer": "Somewhat well",
+    "createdBy": "admin"
+  },
+  {
+    "id": 3,
+    "question": "Can you reframe this negative thought: 'I can't handle this workload'?",
+    "choices": [
+      "I can handle this if I break it down into smaller tasks",
+      "This is too much, I should just quit",
+      "There is no way out of this",
+      "I will never get through it"
+    ],
+    "answer": "I can handle this if I break it down into smaller tasks",
+    "createdBy": "admin"
+  }
+]
+
+ 
