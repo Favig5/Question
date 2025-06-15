@@ -72,7 +72,7 @@ app.post('/api/questions', (req, res) => {
 });
 
 // ✅ POST submit answers (array)
-app.post('/api/submit', (req, res) => {
+app.post('/api/answers', (req, res) => {
   const submissions = req.body;
 
   if (!Array.isArray(submissions) || submissions.length === 0) {
@@ -92,6 +92,9 @@ app.post('/api/submit', (req, res) => {
 
   saveAnswers(answers);
   res.json({ message: "✅ Answers submitted successfully!" });
+});
+app.get('/api/answers', (req, res) => {
+  res.json(answers);
 });
 
 // ✅ Homepage
