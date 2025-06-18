@@ -93,6 +93,8 @@ app.post('/api/answers', (req, res) => {
   saveAnswers(answers);
   res.json({ message: "✅ Answers submitted successfully!" });
 });
+
+// ✅ GET answers
 app.get('/api/answers', (req, res) => {
   res.json(answers);
 });
