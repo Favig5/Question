@@ -1,1 +1,17 @@
-{}
+{
+  "john": [
+    {
+      "questionId": 1,
+      "answer": "B",
+      "submittedAt": "2025-06-18T12:34:56.789Z"
+    }
+  ],
+  "jane": [
+    {
+      "questionId": 2,
+      "answer": "A",
+      "submittedAt": "2025-06-18T12:35:10.123Z"
+    }
+  ]
+}
+
