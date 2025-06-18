@@ -13,7 +13,6 @@ const answerPath = path.join(__dirname, "answers.json");
 let questions = [];
 let answers = [];
 
-// ✅ Load data safely
 function loadJSONSafe(filePath) {
   try {
     if (!fs.existsSync(filePath)) {
@@ -23,7 +22,7 @@ function loadJSONSafe(filePath) {
     return raw.trim() ? JSON.parse(raw) : [];
   } catch (err) {
     console.error(`Error reading ${filePath}:`, err);
-    fs.writeFileSync(filePath, "[]"); // fallback to empty array
+    fs.writeFileSync(filePath, "[]");
     return [];
   }
 }
@@ -36,16 +35,16 @@ function saveAnswers(ans) {
   fs.writeFileSync(answerPath, JSON.stringify(ans, null, 2));
 }
 
-// ✅ Load initial data
+// Load initial data
 questions = loadJSONSafe(questionPath);
 answers = loadJSONSafe(answerPath);
 
-// ✅ GET questions
+// GET all questions
 app.get('/api/questions', (req, res) => {
   res.json(questions);
 });
 
-// ✅ POST new question
+// POST a new question
 app.post('/api/questions', (req, res) => {
   const { username, question, choices, answer } = req.body;
 
@@ -71,7 +70,7 @@ app.post('/api/questions', (req, res) => {
   res.status(201).json({ success: true, data: newQuestion });
 });
 
-// ✅ POST submit answers (array)
+// POST answers
 app.post('/api/answers', (req, res) => {
   const submissions = req.body;
 
@@ -94,7 +93,7 @@ app.post('/api/answers', (req, res) => {
   res.json({ message: "✅ Answers submitted successfully!" });
 });
 
-// ✅ ✅ MODIFIED: GET answers grouped by user
+// ✅ MODIFIED: GET answers grouped by user
 app.get('/api/answers', (req, res) => {
   const grouped = {};
 
@@ -108,12 +107,12 @@ app.get('/api/answers', (req, res) => {
   res.json(grouped);
 });
 
-// ✅ Homepage
+// ✅ ✅ NEW: Homepage route
 app.get('/', (req, res) => {
-  res.send('Questionnaire API is running.');
+  res.send('✅ Questionnaire API is running.');
 });
 
-// ✅ Start server
+// Start server
 app.listen(3000, () => {
   console.log(`✅ Server is running on http://localhost:3000`);
 });
