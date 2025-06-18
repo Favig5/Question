@@ -11,20 +11,20 @@ const questionPath = path.join(__dirname, "questions.json");
 const answerPath = path.join(__dirname, "answers.json");
 
 let questions = [];
-let answers = [];
+let answers = {}; // ✅ Now an object grouped by username
 
 // ✅ Load data safely
-function loadJSONSafe(filePath) {
+function loadJSONSafe(filePath, fallback) {
   try {
     if (!fs.existsSync(filePath)) {
-      fs.writeFileSync(filePath, "[]");
+      fs.writeFileSync(filePath, JSON.stringify(fallback));
     }
     const raw = fs.readFileSync(filePath, "utf-8");
-    return raw.trim() ? JSON.parse(raw) : [];
+    return raw.trim() ? JSON.parse(raw) : fallback;
   } catch (err) {
     console.error(`Error reading ${filePath}:`, err);
-    fs.writeFileSync(filePath, "[]"); // fallback to empty array
-    return [];
+    fs.writeFileSync(filePath, JSON.stringify(fallback));
+    return fallback;
   }
 }
 
@@ -37,8 +37,8 @@ function saveAnswers(ans) {
 }
 
 // ✅ Load initial data
-questions = loadJSONSafe(questionPath);
-answers = loadJSONSafe(answerPath);
+questions = loadJSONSafe(questionPath, []);
+answers = loadJSONSafe(answerPath, {}); // default is an object
 
 // ✅ GET questions
 app.get('/api/questions', (req, res) => {
@@ -71,7 +71,7 @@ app.post('/api/questions', (req, res) => {
   res.status(201).json({ success: true, data: newQuestion });
 });
 
-// ✅ POST submit answers (array)
+// ✅ POST submit answers (grouped by user)
 app.post('/api/submit', (req, res) => {
   const submissions = req.body;
 
@@ -80,18 +80,27 @@ app.post('/api/submit', (req, res) => {
   }
 
   submissions.forEach(sub => {
-    if (!sub.username || !sub.questionId || !sub.answer) return;
+    const { username, questionId, answer } = sub;
+    if (!username || !questionId || !answer) return;
 
-    answers.push({
-      username: sub.username,
-      questionId: sub.questionId,
-      answer: sub.answer,
+    const userAnswers = answers[username] || [];
+
+    userAnswers.push({
+      questionId,
+      answer,
       submittedAt: new Date().toISOString()
     });
+
+    answers[username] = userAnswers;
   });
 
   saveAnswers(answers);
   res.json({ message: "✅ Answers submitted successfully!" });
+});
+
+// ✅ GET answers
+app.get('/api/answers', (req, res) => {
+  res.json(answers);
 });
 
 // ✅ Homepage
