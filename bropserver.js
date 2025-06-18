@@ -93,19 +93,8 @@ app.post('/api/answers', (req, res) => {
   saveAnswers(answers);
   res.json({ message: "✅ Answers submitted successfully!" });
 });
-
-// ✅ GET answers grouped by user
 app.get('/api/answers', (req, res) => {
-  const groupedAnswers = {};
-
-  answers.forEach((ans) => {
-    if (!groupedAnswers[ans.username]) {
-      groupedAnswers[ans.username] = [];
-    }
-    groupedAnswers[ans.username].push(ans);
-  });
-
-  res.json(groupedAnswers);
+  res.json(answers);
 });
 
 // ✅ Homepage
