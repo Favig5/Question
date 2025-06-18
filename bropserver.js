@@ -11,98 +11,71 @@ const questionPath = path.join(__dirname, "questions.json");
 const answerPath = path.join(__dirname, "answers.json");
 
 let questions = [];
-let answers = [];
+let answers = {}; // CHANGED from [] to {} for user-based grouping
 
-// ✅ Load data safely
-function loadJSONSafe(filePath) {
-  try {
-    if (!fs.existsSync(filePath)) {
-      fs.writeFileSync(filePath, "[]");
-    }
-    const raw = fs.readFileSync(filePath, "utf-8");
-    return raw.trim() ? JSON.parse(raw) : [];
-  } catch (err) {
-    console.error(`Error reading ${filePath}:`, err);
-    fs.writeFileSync(filePath, "[]"); // fallback to empty array
-    return [];
-  }
+// Load questions from file
+try {
+  questions = JSON.parse(fs.readFileSync(questionPath));
+} catch (err) {
+  console.error("Error loading questions:", err);
 }
 
-function saveQuestions(qs) {
-  fs.writeFileSync(questionPath, JSON.stringify(qs, null, 2));
+// Load answers from file
+try {
+  answers = JSON.parse(fs.readFileSync(answerPath));
+} catch (err) {
+  console.error("Error loading answers:", err);
 }
 
-function saveAnswers(ans) {
-  fs.writeFileSync(answerPath, JSON.stringify(ans, null, 2));
-}
-
-// ✅ Load initial data
-questions = loadJSONSafe(questionPath);
-answers = loadJSONSafe(answerPath);
-
-// ✅ GET questions
-app.get('/api/questions', (req, res) => {
+// ✅ GET all questions
+app.get("/api/questions", (req, res) => {
   res.json(questions);
 });
 
-// ✅ POST new question
-app.post('/api/questions', (req, res) => {
-  const { username, question, choices, answer } = req.body;
-
-  if (!username || !question || !Array.isArray(choices) || choices.length < 2 || !answer) {
-    return res.status(400).json({ error: "Invalid question input." });
-  }
-
-  if (!choices.includes(answer)) {
-    return res.status(400).json({ error: "Answer must be one of the choices." });
-  }
-
-  const newQuestion = {
-    id: questions.length + 1,
-    question,
-    choices,
-    answer,
-    createdBy: username
-  };
-
-  questions.push(newQuestion);
-  saveQuestions(questions);
-
-  res.status(201).json({ success: true, data: newQuestion });
-});
-
-// ✅ POST submit answers (array)
-app.post('/api/answers', (req, res) => {
-  const submissions = req.body;
-
-  if (!Array.isArray(submissions) || submissions.length === 0) {
-    return res.status(400).json({ message: "Invalid submission data." });
-  }
-
-  submissions.forEach(sub => {
-    if (!sub.username || !sub.questionId || !sub.answer) return;
-
-    answers.push({
-      username: sub.username,
-      questionId: sub.questionId,
-      answer: sub.answer,
-      submittedAt: new Date().toISOString()
-    });
-  });
-
-  saveAnswers(answers);
-  res.json({ message: "✅ Answers submitted successfully!" });
-});
-app.get('/api/answers', (req, res) => {
+// ✅ GET all answers (now grouped by user)
+app.get("/api/answers", (req, res) => {
   res.json(answers);
 });
 
-// ✅ Homepage
-app.get('/', (req, res) => {
-  res.send('Questionnaire API is running.');
+// ✅✅ POST a new answer and group it by userId
+app.post("/api/answers", (req, res) => {
+  const { userId, questionId, selectedOption } = req.body;
+
+  // Dummy correct answers – you can replace this with actual logic later
+  const correctAnswers = {
+    q1: "B", q2: "A", q3: "C", q4: "D", q5: "B",
+    q6: "A", q7: "C", q8: "D", q9: "A", q10: "B"
+  };
+
+  const isCorrect = selectedOption === correctAnswers[questionId];
+
+  const newAnswer = {
+    questionId,
+    selectedOption,
+    isCorrect,
+    timestamp: new Date().toISOString()
+  };
+
+  // If user doesn't exist yet, create array
+  if (!answers[userId]) {
+    answers[userId] = [];
+  }
+
+  // Save answer under user
+  answers[userId].push(newAnswer);
+
+  // Write to file
+  fs.writeFile(answerPath, JSON.stringify(answers, null, 2), (err) => {
+    if (err) {
+      console.error("Error saving answer:", err);
+      return res.status(500).send("Failed to save answer.");
+    }
+
+    res.status(201).json({ message: "Answer saved.", isCorrect });
+  });
 });
 
 // ✅ Start server
 app.listen(3000, () => {
-  console.log(`✅ Server is running on http://localhost:3000`);
+  console.log("Server running on http://localhost:3000");
 });
