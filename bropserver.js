@@ -11,7 +11,7 @@ const questionPath = path.join(__dirname, "questions.json");
 const answerPath = path.join(__dirname, "answers.json");
 
 let questions = [];
-let answers = {}; // ✅ Now an object grouped by username
+let answers = {}; // ✅ grouped by username
 
 // ✅ Load data safely
 function loadJSONSafe(filePath, fallback) {
@@ -38,7 +38,7 @@ function saveAnswers(ans) {
 
 // ✅ Load initial data
 questions = loadJSONSafe(questionPath, []);
-answers = loadJSONSafe(answerPath, {}); // default is an object
+answers = loadJSONSafe(answerPath, {}); 
 
 // ✅ GET questions
 app.get('/api/questions', (req, res) => {
@@ -71,12 +71,18 @@ app.post('/api/questions', (req, res) => {
   res.status(201).json({ success: true, data: newQuestion });
 });
 
-// ✅ POST /api/answers (submit answers grouped by user)
+// ✅ POST /api/answers (submit OR retrieve)
 app.post('/api/answers', (req, res) => {
   const submissions = req.body;
 
-  if (!Array.isArray(submissions) || submissions.length === 0) {
-    return res.status(400).json({ message: "Invalid submission data." });
+  // If body is empty → return all answers
+  if (!submissions || (Array.isArray(submissions) && submissions.length === 0) || Object.keys(submissions).length === 0) {
+    return res.json(answers);
+  }
+
+  // Otherwise → save submissions
+  if (!Array.isArray(submissions)) {
+    return res.status(400).json({ message: "Submissions must be an array." });
   }
 
   submissions.forEach(sub => {
