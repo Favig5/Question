@@ -71,8 +71,8 @@ app.post('/api/questions', (req, res) => {
   res.status(201).json({ success: true, data: newQuestion });
 });
 
-// ✅ POST submit answers (grouped by user)
-app.post('/api/submit', (req, res) => {
+// ✅ POST /api/answers (submit answers grouped by user)
+app.post('/api/answers', (req, res) => {
   const submissions = req.body;
 
   if (!Array.isArray(submissions) || submissions.length === 0) {
@@ -96,11 +96,6 @@ app.post('/api/submit', (req, res) => {
 
   saveAnswers(answers);
   res.json({ message: "✅ Answers submitted successfully!" });
-});
-
-// ✅ GET answers
-app.get('/api/answers', (req, res) => {
-  res.json(answers);
 });
 
 // ✅ Homepage
